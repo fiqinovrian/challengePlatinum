@@ -1,0 +1,19 @@
+module.exports = {
+    'env': {
+        'browser': true,
+        'commonjs': true,
+        'es2021': true
+    },
+    'overrides': [
+    ],
+    'parserOptions': {
+        'ecmaVersion': 'latest'
+    },
+    'rules': {
+        'no-console': 'off',
+        'quotes': [
+        'error',
+        'single'
+    ]
+    }
+}
