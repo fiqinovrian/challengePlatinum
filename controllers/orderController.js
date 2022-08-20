@@ -1,95 +1,118 @@
 require('dotenv').config();
-const Order = require('../models').Order;
+const { Order } = require('../models');
 const transporter = require('../helpers/transporter');
 
-const create = (req, res) => {
-    const data = {
-        userId: req.body.userId,
-        productId: req.body.productId,
-        qty: req.body.qty,
-        priceTotal: req.body.priceTotal,
-        status: req.body.status,
-    }
-
-    Order.create(data)
-        .then(data => 
-        {
-            res.status(201).json(data)
-        })
-        .catch(err => {
-            res.status(500).json(err)
-        })
-}
-
-const show = (req, res) => {
-    Order.findAll()
-        .then(Orders => {
-            res.status(200).json(Orders);
-        })
-        .catch(err => {
-            res.status(500).json(err)
-        })
-}
-
-const getById = (req, res) => {
-    const idOrder = req.params.id;
-    return Order.findByPk(idOrder, {
-            include: []
-        })
-        .then((order) => {
-            if (!order) {
-                return res.status(404).json('Order tidak ditemukan')
-            }
-            return res.status(200).json(order)
-        })
-        .catch((err) => {
-            res.status(500).json(err)
-        })
-}
-
-const updateById = (req, res) => {
-    Order.update({
+const create = async (req, res) => {
+    try {
+        const data = {
             userId: req.body.userId,
             productId: req.body.productId,
             qty: req.body.qty,
-            priceTotal: req.body.priceTotal
-        }, {
-            where: {
-                id: req.params.id
-            }
-        })
-        .then(() => {
-            res.status(200).json('Order berhasil di update')
-        })
-        .catch((err) => {
-            res.status(500).json(err);
-        })
+            priceTotal: req.body.priceTotal,
+            status: req.body.status
+        }
+        Order.create(data)
+            .then(data => {
+                res.status(201).json(data)
+            })
+            .catch(err => {
+                res.status(500).json(err)
+            })
+    }
+    catch(err) {
+        return res.status(500).json(err)
+    }
 }
 
-const deleteById = (req, res) => {
+const show = async (req, res) => {
+    try {
+        const showOrder = await Order.findAll();
+        return res.status(200).json(showOrder);
+    }
+    catch (err) {
+        return res.status(500).json('Internal Server Error');
+    }
+}
+
+const getById = async (req, res) => {
     const idOrder = req.params.id;
-    Order.destroy({
-            where: {
-                id: idOrder
-            }
+    try {
+        const orderUser = await Order.findByPk(idOrder, {
+            include: []
         })
-        .then(() => {
-            res.status(200).json('Order berhasil dihapus')
-        })
-        .catch((err) => {
-            res.status(500).json(err)
-        })
+        if(orderUser != null) {
+            return res.status(200).json(orderUser);
+        }
+        return res.status(500).json('Order tidak ditemukan');
+    }
+    catch(err) {
+        return res.status(500).json('Internal Server Error');
+    }
 }
 
-const countOrdersByUserId = (req, res) => {
-    const hitung = Order.count({
+const updateById = async (req, res) => {
+    const orderId = req.params.id;
+    try {
+        const orderUser = await Order.findByPk(orderId, {
+            include: []
+        })
+        if(orderUser != null) {
+            const updateOrder = Order.update({
+                userId: req.body.userId,
+                productId: req.body.productId,
+                qty: req.body.qty,
+                priceTotal: req.body.priceTotal
+            }, {
+                where: {
+                    id: req.params.id
+                }
+            })
+            return res.status(200).json('Order berhasil di update');
+        }
+        return res.status(500).json('Order tidak ditemukan');
+    }
+    catch(err) {
+        return res.status(500).json('Internal Server Error');
+    }
+}
+
+const deleteById = async (req, res) => {
+    const idOrder = req.params.id;
+    try {
+        const orderUser = await Order.findByPk(idOrder, {
+            include: []
+        })
+        if (orderUser != null) {
+            const deleteOrder = Order.destroy({
+                where: {
+                    id: idOrder
+                }
+            })
+            return res.status(200).json('Order berhasil di delete');
+        }
+        return res.status(500).json('Order tidak ditemukan');
+    }
+    catch(err) {
+        return res.status(500).json('Internal Server Error');
+    }
+}
+
+const countOrdersByUserId = async (req, res) => {
+    const idUser = req.params.id;
+    try {
+        const hitung = await Order.count({
             where: {
-                userId: req.params.id
+                userId: idUser
             }
         })
-        .then((hitung) => {
-            res.status(200).json(hitung)
-        })
+        if(hitung != null) {
+            return res.status(200).json(hitung)
+        }
+        return res.status(200).json('Belum ada order')
+    }
+    catch(err) {
+        return res.status(500).json('Internal Server Error');
+    }
 }
 
 module.exports = {

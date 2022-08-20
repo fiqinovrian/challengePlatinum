@@ -1,11 +1,12 @@
+require('dotenv').config();
 const Product = require('../models').Product;
 const cloudinary = require('cloudinary').v2;
 const fs = require('fs');
 
 cloudinary.config({
-    cloud_name: 'fn',
-    api_key: '183654398839397',
-    api_secret: 'tSxOcx4RiI-7NhZDoOymWOgAXwg',
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUD_APIKEY,
+    api_secret: process.env.CLOUD_APISECRET,
 });
 
 const uploadCloudinary = async(filePath) => {
@@ -26,23 +27,26 @@ const uploadCloudinary = async(filePath) => {
 
 const create = async (req, res) => {
     const url = await uploadCloudinary(req.file.path);
-    if(url) {
-        const data = {
-            code: req.body.code,
-            name: req.body.name,
-            price: req.body.price,
-            image: url
-        }
+    try {
+        if (url) {
+            const data = {
+                code: req.body.code,
+                name: req.body.name,
+                price: req.body.price,
+                image: url
+            }
 
-        Product.create(data)
-            .then(data => {
-                res.status(201).json(data)
-            })
-            .catch(err => {
-                res.status(500).json(err)
-            })
-    } else {
-        return res.status(500).json('Upload gagal');
+            const createProduct = Product.create(data);
+            if(createProduct) {
+                return res.status(201).json(data)
+            }
+            return res.status(500).json('Gagal Create Product')
+        } else {
+            return res.status(500).json('Upload gagal');
+        }
+    }
+    catch(err) {
+        return res.status(500).json('Internal Server Error');
     }
 }
 
@@ -52,7 +56,7 @@ const show = async function (req, res) {
         return res.status(200).json(showProduct);
     }
     catch(err) {
-        return res.status(500).json(err);
+        return res.status(500).json('Internal Server Error');
     }
 }
 
@@ -63,7 +67,7 @@ const getById = async function (req, res) {
             include: []
         })
         if(isProductExist) {
-            return res.status(200).json(product)
+            return res.status(200).json(isProductExist)
         };
         return res.status(404).json('Product tidak ditemukan')
     }

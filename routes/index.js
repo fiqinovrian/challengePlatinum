@@ -59,6 +59,7 @@ router.get('/api/user/show', restrict(['admin']), userController.show);
 router.get('/api/user/:id', restrict(['user','admin']), userController.getById);
 router.put('/api/user/:id', restrict(['user','admin']), userController.updateById);
 router.delete('/api/user/:id', restrict(['admin']), userController.deleteById);
+router.get('/api/user/verify/:token',  auth.verification);
 
 // router.get('/dashboard', restrict, (req, res) => {
 //     res.render('dashboard')
@@ -73,7 +74,7 @@ router.post('/api/user/profile/avatar/addOnline', restrict(['user','admin']), up
 router.post('/api/product/add', restrict(['admin']), upload.single('image'), productController.create);
 router.get('/api/product/show', restrict(['user','admin']), productController.show);
 router.get('/api/product/:id', restrict(['user','admin']), productController.getById);
-router.post('/api/product/:id', restrict(['admin']), productController.updateById);
+router.put('/api/product/:id', restrict(['admin']), productController.updateById);
 router.delete('/api/product/:id', restrict(['admin']), productController.deleteById);
 
 //router order

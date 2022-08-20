@@ -34,24 +34,24 @@ const show = (req, res) => {
     })
 }
 
-const getById = (req, res) => {
+const getById = async (req, res) => {
     const idUser = req.params.id;
-    return User.findByPk(idUser, {
-        include: []
-    })
-    .then((user) => {
-        if(!user) {
-            return res.status(404).json('User tidak ditemukan')
-        }
+    try {
+        const user = await User.findByPk(idUser, {
+            include: []
+        })
+        if(user != null) {
             return res.status(200).json(user)
-        })
-        .catch((err) => {
-            res.status(500).json(err)
-        })
+        }
+        return res.status(500).json('User tidak ditemukan');
+    }
+    catch (err) {
+        return res.status(500).json('Internal Server Error');
+    }
 }
 
 const updateById = (req, res) => {
-    const cekEmail =  User.findOne({ where: { email: req.body.email } });
+    const cekEmail =  User.findOne({ where: { id: req.params.id, email: req.body.email } });
     if (cekEmail === null) {
         const pass = req.body.password;
         if (pass.length < 8) {
@@ -62,6 +62,7 @@ const updateById = (req, res) => {
                 name: req.body.name,
                 email: req.body.email,
                 gender: req.body.gender,
+                role: req.body.role,
                 password: encryptedPassword
             }
             User.update(data)

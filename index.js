@@ -15,7 +15,7 @@ const passport = require('./lib/passport');
 const swaggerJson = require('./swagger.json');
 const swaggerUi = require('swagger-ui-express');
 
-const server = app.listen(3000, ()  => {
+const server = app.listen(port, ()  => {
     console.log('server running at port 3000')
 })
 
