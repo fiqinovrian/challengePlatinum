@@ -41,7 +41,7 @@ const getById = (req, res) => {
     })
     .then((user) => {
         if(!user) {
-            return res.status(404).json("User tidak ditemukan")
+            return res.status(404).json('User tidak ditemukan')
         }
             return res.status(200).json(user)
         })
@@ -83,7 +83,7 @@ const deleteById = (req, res) => {
     const idUser = req.params.id;
     User.destroy({ where: { id: idUser } })
     .then(() => {
-        res.status(200).json("User berhasil dihapus")
+        res.status(200).json('User berhasil dihapus')
     })
     .catch((err) => {
         res.status(500).json(err)

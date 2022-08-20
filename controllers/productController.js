@@ -64,8 +64,8 @@ const getById = async function (req, res) {
         })
         if(isProductExist) {
             return res.status(200).json(product)
-        }
-        return res.status(404).json("Product tidak ditemukan")
+        };
+        return res.status(404).json('Product tidak ditemukan')
     }
     catch(err) {
         return res.status(500).json(err)
@@ -89,9 +89,9 @@ const updateById = async function (req, res) {
                 }
             })
             if (updateProduct) {
-                return res.status(200).json("Produk berhasil di update")
+                return res.status(200).json('Produk berhasil di update')
             } else {
-                return res.status(500).json("Gagal Update Produk");
+                return res.status(500).json('Gagal Update Produk');
             }
         } else {
             return res.status(500).json('Produk tidak ditemukan');
@@ -111,7 +111,7 @@ const deleteById = async function (req, res) {
         if(isProductExist) {
             const deleteProduct = Product.destroy({ where: { id: idProduct } })
             if(deleteProduct) {
-                return res.status(200).json("Product berhasil dihapus")
+                return res.status(200).json('Product berhasil dihapus')
             } else {
                 return res.status(500).json('Gagal delete produk');
             }

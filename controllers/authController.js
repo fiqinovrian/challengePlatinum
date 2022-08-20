@@ -8,6 +8,7 @@ const register = async function (req, res) {
     if (cekEmail) {
         return res.render('register', { message: 'Email has been already taken' });
     }
+    
     try {
         const pass = req.body.password;
         if(pass.length < 8) {
@@ -18,7 +19,9 @@ const register = async function (req, res) {
             name: req.body.name,
             email: req.body.email,
             gender: req.body.gender,
-            password: encryptedPassword
+            password: encryptedPassword,
+            role: req.body.role
+          
         }
         User.create(data)
         return res.status(200).json(data);
@@ -42,6 +45,7 @@ const login = async function (req, res) {
             const accessToken = jwt.sign({
                 id: isUserExist.id,
                 email: isUserExist.email,
+                role: isUserExist.role
             }, secret, { expiresIn: '10h' })
             return res.json({
                 id: isUserExist.id,

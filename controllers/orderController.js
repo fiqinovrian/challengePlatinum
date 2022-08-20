@@ -1,6 +1,6 @@
 require('dotenv').config();
 const Order = require('../models').Order;
-const transporter = require('../helper/transporter');
+const transporter = require('../helpers/transporter');
 
 const create = (req, res) => {
     const data = {
@@ -9,7 +9,6 @@ const create = (req, res) => {
         qty: req.body.qty,
         priceTotal: req.body.priceTotal,
         status: req.body.status,
-        emailUser: req.body.email,
     }
 
     Order.create(data)
@@ -39,7 +38,7 @@ const getById = (req, res) => {
         })
         .then((order) => {
             if (!order) {
-                return res.status(404).json("Order tidak ditemukan")
+                return res.status(404).json('Order tidak ditemukan')
             }
             return res.status(200).json(order)
         })
@@ -60,7 +59,7 @@ const updateById = (req, res) => {
             }
         })
         .then(() => {
-            res.status(200).json("Order berhasil di update")
+            res.status(200).json('Order berhasil di update')
         })
         .catch((err) => {
             res.status(500).json(err);
@@ -75,7 +74,7 @@ const deleteById = (req, res) => {
             }
         })
         .then(() => {
-            res.status(200).json("Order berhasil dihapus")
+            res.status(200).json('Order berhasil dihapus')
         })
         .catch((err) => {
             res.status(500).json(err)
