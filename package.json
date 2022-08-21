@@ -4,7 +4,7 @@
   "description": "Challenge Binar",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "node index.js",
     "test": "jest"
   },
   "author": "Fiqi Novrian",
