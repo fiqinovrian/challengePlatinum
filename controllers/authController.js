@@ -7,7 +7,7 @@ const transporter = require('../helpers/transporter');
 const register = async function (req, res) {
     const cekEmail = await User.findOne({ where: { email: req.body.email } });
     if (cekEmail) {
-        return res.render('register', { message: 'Email has been already taken' });
+        return res.status(200).json('Email has been already taken');
     }
     
     try {
@@ -43,7 +43,7 @@ const register = async function (req, res) {
         })
         return res.status(200).json('Email Verifikasi Telah Dikirimkan');
     } catch(err) {
-        return res.render('register', { message: 'Internal Server Error' });
+        return res.status(500).json('Internal Server Error')
     }
 }
 

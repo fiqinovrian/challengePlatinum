@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">46.26% </span>
+                <span class="strong">45.25% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>62/134</span>
+                <span class='fraction'>62/137</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">46.26% </span>
+                <span class="strong">45.25% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>62/134</span>
+                <span class='fraction'>62/137</span>
             </div>
         
             
@@ -196,7 +196,10 @@
 <a name='L131'></a><a href='#L131'>131</a>
 <a name='L132'></a><a href='#L132'>132</a>
 <a name='L133'></a><a href='#L133'>133</a>
-<a name='L134'></a><a href='#L134'>134</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -224,6 +227,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -358,23 +364,26 @@ const uploadCloudinary = <span class="fstat-no" title="function not covered" >as
 &nbsp;
 const create = <span class="fstat-no" title="function not covered" >async (req, res) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    const url = await uploadCloudinary(req.file.path);</span>
-<span class="cstat-no" title="statement not covered" >    if(url) {</span>
-<span class="cstat-no" title="statement not covered" >        const data = {</span>
-<span class="cstat-no" title="statement not covered" >            code: req.body.code,</span>
-<span class="cstat-no" title="statement not covered" >            name: req.body.name,</span>
-<span class="cstat-no" title="statement not covered" >            price: req.body.price,</span>
-<span class="cstat-no" title="statement not covered" >            image: url</span>
-<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >    try {</span>
+<span class="cstat-no" title="statement not covered" >        if (url) {</span>
+<span class="cstat-no" title="statement not covered" >            const data = {</span>
+<span class="cstat-no" title="statement not covered" >                code: req.body.code,</span>
+<span class="cstat-no" title="statement not covered" >                name: req.body.name,</span>
+<span class="cstat-no" title="statement not covered" >                price: req.body.price,</span>
+<span class="cstat-no" title="statement not covered" >                image: url</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >        Product.create(data)</span>
-<span class="cstat-no" title="statement not covered" >            .then(data =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >                res.status(201).json(data)</span>
-<span class="cstat-no" title="statement not covered" >            })</span>
-<span class="cstat-no" title="statement not covered" >            .catch(err =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >                res.status(500).json(err)</span>
-<span class="cstat-no" title="statement not covered" >            })</span>
-<span class="cstat-no" title="statement not covered" >    } else {</span>
-<span class="cstat-no" title="statement not covered" >        return res.status(500).json('Upload gagal');</span>
+<span class="cstat-no" title="statement not covered" >            const createProduct = Product.create(data);</span>
+<span class="cstat-no" title="statement not covered" >            if(createProduct) {</span>
+<span class="cstat-no" title="statement not covered" >                return res.status(201).json(data)</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >            return res.status(500).json('Gagal Create Product')</span>
+<span class="cstat-no" title="statement not covered" >        } else {</span>
+<span class="cstat-no" title="statement not covered" >            return res.status(500).json('Upload gagal');</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >    }</span>
+<span class="cstat-no" title="statement not covered" >    catch(err) {</span>
+<span class="cstat-no" title="statement not covered" >        return res.status(500).json('Internal Server Error');</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" >}</span>
 &nbsp;
@@ -384,7 +393,7 @@ const show = async function (req, res) {
         return res.status(200).json(showProduct);
     }
     catch(err) {
-        return res.status(500).json(err);
+        return res.status(500).json('Internal Server Error');
     }
 }
 &nbsp;
@@ -469,7 +478,7 @@ module.exports = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2022-08-20T13:54:42.055Z
+                at 2022-08-21T15:26:49.116Z
             </div>
         <script src="../prettify.js"></script>
         <script>

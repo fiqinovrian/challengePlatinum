@@ -27,6 +27,9 @@ const create = async (req, res) => {
 const show = async (req, res) => {
     try {
         const showOrder = await Order.findAll();
+        if (showOrder === undefined) { 
+            return res.status(500).json('Tidak ada data order');
+        }    
         return res.status(200).json(showOrder);
     }
     catch (err) {

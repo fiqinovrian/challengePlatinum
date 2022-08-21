@@ -31,10 +31,20 @@ describe('Fungsi Register', () => {
         const req = mockRequest();
         const res = mockResponse();
 
-        User.create.mockResolvedValueOnce(undefined);
+        const mockData = {
+            id: 5,
+            name: 'kuya2',
+            email: 'kuya2@gmail.com',
+            gender: 'Female',
+            role: 'user',
+            is_verified: false,
+            token: '5xwqdfa2nva',
+            is_expired: false
+        }
+        User.findOne.mockResolvedValueOnce(mockData);
         await authController.register(req, res);
 
-        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json).toHaveBeenCalledWith('Email has been already taken')
 
     })
